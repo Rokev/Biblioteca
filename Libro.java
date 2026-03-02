@@ -1,4 +1,4 @@
-public package Biblioteca;
+ package Biblioteca;
 
 class Libro {
 

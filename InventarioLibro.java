@@ -7,21 +7,19 @@ public class InventarioLibro {
 
   // modificar constructor para agg cliente 
     public InventarioLibro() {
-        this.lLibro = new ArrayList();
+        this.lLibro = new ArrayList<>();
        // this.lCliente=new ArrayList<>();
 
     }
-    public registrarNuevoLibro(Libro temp){
+    public boolean registrarNuevoLibro(Libro temp){
         for(int i=0;i<lLibro.size();i++){
     if(lLibro.get(i).getIdentificador()==temp.getIdentificador()){
         return false;
+    } 
+    
+}lLibro.add(temp);
+    return true;
+
     }
-        } lLibro.add(temp);
-    }
-
-
-
-  
-
 
 }
