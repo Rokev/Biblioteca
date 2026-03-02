@@ -15,7 +15,7 @@ public class Main {
 
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:

@@ -64,6 +64,7 @@ public class Cliente {
     }
 
     public String mostrarInfo(){
-        return "Cliente: " + nombre + ", Teléfono: " + telefono + ", Dirección: " + dirección;
+        String tieneLibro = (this.libro!=null) ? "Si tiene libro": "No tiene libro";
+        return "Cliente: " + nombre + ", Teléfono: " + telefono + ", Dirección: " + dirección + ", " + tieneLibro;
     }
 }
