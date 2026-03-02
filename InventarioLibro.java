@@ -47,6 +47,23 @@ public class InventarioLibro {
 }  return true; 
 }
 
+public boolean cambiarEstadoPorPrestamo(Libro t){
+    boolean temp=this.buscarLibro(t.getIdentificador());
+    if(temp){
+    t.setEstado("prestado a un cliente");
+    return true;
+    }return false;
+}
+public boolean cambiarEstadoPorRetiro(Libro t){
+    boolean temp=this.buscarLibro(t.getIdentificador());
+    if(temp){
+    t.setEstado("libro retirado");
+    return true;
+    }return false;
+}
+
+
+
 public void mostrarEstado(Libro t){
     boolean temp=this.buscarLibro(t.getIdentificador());
     if(temp){
