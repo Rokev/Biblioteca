@@ -32,5 +32,11 @@ public class InventarioLibro {
         return true;
     }
 
+    public void mostrarInfoClientes(){
+        for(Cliente c: lCliente){
+            c.mostrarInfo();
+            System.out.println("");
+        }
+    }
     
 }
