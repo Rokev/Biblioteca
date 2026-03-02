@@ -3,23 +3,67 @@ import java.util.ArrayList;
 
 public class InventarioLibro {
     ArrayList <Libro> lLibro;
-  //  ArrayList <Cliente> lCliente;
+    ArrayList <Cliente> lCliente;
 
-  // modificar constructor para agg cliente 
+
     public InventarioLibro() {
         this.lLibro = new ArrayList<>();
-       // this.lCliente=new ArrayList<>();
+        this.lCliente=new ArrayList<>();
 
     }
     public boolean registrarNuevoLibro(Libro temp){
         for(int i=0;i<lLibro.size();i++){
-    if(lLibro.get(i).getIdentificador()==temp.getIdentificador()){
-        return false;
-    } 
+            if(lLibro.get(i).getIdentificador()==temp.getIdentificador()){
+                return false;
+            } 
     
-}lLibro.add(temp);
-    return true;
-
+        }
+        lLibro.add(temp);
+        return true;
     }
 
+    public boolean registrarNuevoCliente(Cliente cliente){
+        for(Cliente c: lCliente){
+            if(c.getId()==cliente.getId()){
+                return false;
+            }
+        }
+        lCliente.add(cliente);
+        return true;
+    }
+
+    public void mostrarInfoClientes(){
+        for(Cliente c: lCliente){
+            c.mostrarInfo();
+            System.out.println("");
+        }
+    }
+    
+    public boolean buscarLibro(int codigo){
+        for(int i=0;i<lLibro.size();i++){
+    if(lLibro.get(i).getIdentificador()!=codigo){
+        return false;
+    } 
+}  return true; 
+}
+
+public void mostrarEstado(Libro t){
+    boolean temp=this.buscarLibro(t.getIdentificador());
+    if(temp){
+        System.out.println(t.getEstado());
+    } System.out.println("no se enceuntra dentro del inventario");
+
+}
+
+    public Cliente buscarCliente(int id){
+        for (Cliente c: lCliente){
+            if(c.getId()==id){
+                return c;
+            }
+        }
+        return null;
+    }
+    public void realizarPrestamoCliente(Cliente c, Libro l){
+
+    }
 }

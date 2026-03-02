@@ -1,7 +1,10 @@
 import java.util.Scanner;
 
+import Biblioteca.InventarioLibro;
+
 public class Main {
     public static void main(String[] args) {
+        InventarioLibro inventario = new InventarioLibro();
         Scanner scanner = new Scanner(System.in);
         int opcion =0;
         while(opcion != 7){
@@ -15,14 +18,14 @@ public class Main {
 
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:
-                    // Lógica para agregar cliente
+                    System.out.println("Ingresa los datos del nuevo cliente");
                     break;
                 case 2:
-                    // Lógica para mostrar clientes
+                    inventario.mostrarInfoClientes();
                     break;
                 case 3:
                     // Lógica para agregar libro a cliente
