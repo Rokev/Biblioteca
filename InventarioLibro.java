@@ -3,12 +3,12 @@ import java.util.ArrayList;
 
 public class InventarioLibro {
     ArrayList <Libro> lLibro;
-  //  ArrayList <Cliente> lCliente;
+    ArrayList <Cliente> lCliente;
 
-  // modificar constructor para agg cliente 
+
     public InventarioLibro() {
         this.lLibro = new ArrayList<>();
-       // this.lCliente=new ArrayList<>();
+        this.lCliente=new ArrayList<>();
 
     }
     public boolean registrarNuevoLibro(Libro temp){
@@ -21,5 +21,21 @@ public class InventarioLibro {
     return true;
 
     }
+
+    public boolean buscarLibro(int codigo){
+        for(int i=0;i<lLibro.size();i++){
+    if(lLibro.get(i).getIdentificador()!=codigo){
+        return false;
+    } 
+}  return true; 
+}
+
+public void mostrarEstado(Libro t){
+    boolean temp=this.buscarLibro(t.getIdentificador());
+    if(temp){
+        System.out.println(t.getEstado());
+    } System.out.println("no se enceuntra dentro del inventario");
+
+}
 
 }
