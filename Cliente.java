@@ -4,15 +4,15 @@ public class Cliente {
     private String nombre;
     private String telefono;
     private String dirección;
-    //private Libro libro;
+    private Libro libro;
 
 
-    public Cliente(int id, String nombre, String telefono, String dirección/*,Libro libro*/) {
+    public Cliente(int id, String nombre, String telefono, String dirección,Libro libro) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
         this.dirección = dirección;
-        //this.libro = libro;
+        this.libro = libro;
     }
 
 
@@ -55,12 +55,12 @@ public class Cliente {
         this.dirección = dirección;
     }
 
-    //public Libro getLibro() {
-    //    return libro; 
-    //}
+    public Libro getLibro() {
+        return libro; 
+    }
     
-    public void setLibro(/*Libro libro*/) {
-        //this.libro = libro;
+    public void setLibro(Libro libro) {
+        this.libro = libro;
     }
 
     public String mostrarInfo(){
