@@ -69,7 +69,7 @@ class Libro {
         this.categoria = categoria;
     }
 
-    public boolean isEstado() {
+    public boolean getEstado() {
         return estado;
     }
 
