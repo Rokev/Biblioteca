@@ -8,10 +8,10 @@ class Libro {
     String editorial;
     int añoPublicacion;
     String categoria;
-    boolean estado;
+    String estado;
     
     public Libro(int identificador, String titulo, String autor, String editorial, int añoPublicacion, String categoria,
-            boolean estado) {
+            String estado) {
         this.identificador = identificador;
         this.titulo = titulo;
         this.autor = autor;
@@ -69,13 +69,14 @@ class Libro {
         this.categoria = categoria;
     }
 
-    public boolean getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
+
     
 }
 
