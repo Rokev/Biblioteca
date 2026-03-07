@@ -67,4 +67,12 @@ public class Cliente {
         String tieneLibro = (this.libro!=null) ? "Si tiene libro": "No tiene libro";
         return "Cliente: " + nombre + ", Teléfono: " + telefono + ", Dirección: " + dirección + ", " + tieneLibro;
     }
+
+    public boolean recibirLibro(Libro libro){
+        if(this.libro == null && libro !=null){
+            this.libro = libro;
+            return true;
+        }
+        return fase;
+    }
 }
