@@ -10,6 +10,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int opcion =0;
         while(opcion != 7){
+            System.out.println("\n--- MENÚ ---");
             System.out.println("1. Agregar cliente");
             System.out.println("2. Mostrar clientes");
             System.out.println("3. Agregar libro a cliente");
