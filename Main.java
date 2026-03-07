@@ -11,7 +11,7 @@ public class Main {
             System.out.println("1. Agregar cliente");
             System.out.println("2. Mostrar clientes");
             System.out.println("3. Agregar libro a cliente");
-            System.out.println("4. ");
+            System.out.println("4. agregar libro  ");
             System.out.println("5. ");
             System.out.println("6. ");
             System.out.println("7. Salir");
@@ -31,10 +31,10 @@ public class Main {
                     // Lógica para agregar libro a cliente
                     break;
                     case 4:
-                    // Lógica 
+                inventario.registrarNuevoLibro();
                     break;
-                case 7:
-                    System.out.println("Saliendo...");
+                case 5:
+                inventario.listarLibros();
                     break;
                 default:
                     System.out.println("Opción no válida, intente nuevamente.");
@@ -42,4 +42,13 @@ public class Main {
         }
         scanner.close();
     }
+
+
+
+
+
+
+
+
+
 }
