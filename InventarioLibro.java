@@ -50,7 +50,7 @@ public class InventarioLibro {
 public void mostrarEstado(Libro t){
     boolean temp=this.buscarLibro(t.getIdentificador());
     if(temp){
-        System.out.println(t.getEstado());
+        System.out.println(t.getEstado(), "informacion libro" , ":", t.getTitulo() , t.getAñoPublicacion(), t.getAutor(),t.identificador,t.getCategoria(),t.getEditorial(),t.get);
     } System.out.println("no se enceuntra dentro del inventario");
 
 }
@@ -64,6 +64,19 @@ public void mostrarEstado(Libro t){
         return null;
     }
     public void realizarPrestamoCliente(Cliente c, Libro l){
-
+        
     }
+
+    public void listarLibros() {
+    for (Libro libro : lLibro) {
+        System.out.println("ID: " + libro.identificador);
+        System.out.println("Titulo: " + libro.titulo);
+        System.out.println("Autor: " + libro.autor);
+        System.out.println("Editorial: " + libro.editorial);
+        System.out.println("Año: " + libro.añoPublicacion);
+        System.out.println("Categoria: " + libro.categoria);
+        System.out.println("Estado: " + libro.estado);
+        System.out.println("----------------------");
+    }
+}
 }
