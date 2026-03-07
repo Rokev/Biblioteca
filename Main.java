@@ -97,6 +97,14 @@ public class Main {
                 case 5:
                 inventario.listarLibros();
                     break;
+                case 6:
+                    System.out.print("Id del cliente que devolverá el libro: ");
+                    int idClienteDev = scanner.nextInt();
+                    scanner.nextLine();
+                    boolean devuelto = inventario.registrarDevolucionCliente(idClienteDev);
+                    System.out.println(devuelto ? "Devolución registrada." :
+                            "No se pudo registrar la devolución (cliente o estado inválido).");
+                    break;
                 default:
                     System.out.println("Opción no válida, intente nuevamente.");
             }
