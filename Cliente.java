@@ -75,4 +75,12 @@ public class Cliente {
         }
         return fase;
     }
+
+    public boolean devolverLibro(){
+        if(this.libro != null){
+            this.libro = null;
+            return true;
+        }
+        return false; 
+    }
 }

@@ -62,8 +62,6 @@ public boolean cambiarEstadoPorRetiro(Libro t){
     }return false;
 }
 
-
-
 public void mostrarEstado(Libro t){
     boolean temp=this.buscarLibro(t.getIdentificador());
     if(temp){
@@ -80,7 +78,22 @@ public void mostrarEstado(Libro t){
         }
         return null;
     }
-    public void realizarPrestamoCliente(Cliente c, Libro l){
-
+public boolean realizarPrestamoCliente(int idCliente, Libro libro) {
+    Cliente c = buscarCliente(idCliente);
+    if (c == null || libro == null) {
+        return false;
     }
+    if (c.getLibro() != null) { 
+        return false;
+    }
+    if (!buscarLibro(libro.getIdentificador())) {
+        return false;
+    }
+    boolean ok = c.recibirLibro(libro);
+    if (ok) {
+        cambiarEstadoPorPrestamo(libro);
+    }
+    return ok;
+}
+
 }
