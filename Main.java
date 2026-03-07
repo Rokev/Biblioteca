@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+import Biblioteca.Cliente;
 import Biblioteca.InventarioLibro;
 
 public class Main {
@@ -23,6 +24,21 @@ public class Main {
             switch (opcion) {
                 case 1:
                     System.out.println("Ingresa los datos del nuevo cliente");
+                    System.out.print("Id cliente: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Nombre: ");
+                    String nombre = scanner.nextLine();
+                    System.out.print("Teléfono: ");
+                    String telefono = scanner.nextLine();
+                    System.out.print("Dirección: ");
+                    String direccion = scanner.nextLine();
+                    Cliente nuevo = new Cliente(id, nombre, telefono, direccion, null);
+                    if (inventario.registrarNuevoCliente(nuevo)) {
+                        System.out.println("Cliente agregado.");
+                    } else {
+                        System.out.println("Ya existe un cliente con ese id.");
+                    }
                     break;
                 case 2:
                     inventario.mostrarInfoClientes();
