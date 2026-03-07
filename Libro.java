@@ -1,6 +1,6 @@
- package Biblioteca;
+package Biblioteca;
 
-class Libro {
+public class Libro {
 
     int identificador;
     String titulo;

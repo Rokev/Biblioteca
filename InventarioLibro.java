@@ -34,8 +34,8 @@ public class InventarioLibro {
 
     public void mostrarInfoClientes(){
         for(Cliente c: lCliente){
-            c.mostrarInfo();
-            System.out.println("");
+            String x =c.mostrarInfo();
+            System.out.println(x);
         }
     }
     
@@ -46,6 +46,14 @@ public class InventarioLibro {
     } 
 }  return true; 
 }
+    public Libro buscarLibroInventario(int codigo){
+        for (Libro l : lLibro) {
+            if(l.getIdentificador() == codigo) {
+                return l;
+            }   
+        }
+        return null;
+    }
 
 public boolean cambiarEstadoPorPrestamo(Libro t){
     boolean temp=this.buscarLibro(t.getIdentificador());

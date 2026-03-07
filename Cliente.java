@@ -73,7 +73,7 @@ public class Cliente {
             this.libro = libro;
             return true;
         }
-        return fase;
+        return false;
     }
 
     public boolean devolverLibro(){

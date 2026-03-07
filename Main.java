@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 import Biblioteca.Cliente;
 import Biblioteca.InventarioLibro;
+import Biblioteca.Libro;
 
 public class Main {
     public static void main(String[] args) {
@@ -53,26 +54,14 @@ public class Main {
                     System.out.print("Identificador: ");
                     int idLib = scanner.nextInt();
                     scanner.nextLine();
-                    System.out.print("Título: ");
-                    String titulo = scanner.nextLine();
-                    System.out.print("Autor: ");
-                    String autor = scanner.nextLine();
-                    System.out.print("Editorial: ");
-                    String editorial = scanner.nextLine();
-                    System.out.print("Año de publicación: ");
-                    int año = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.print("Categoría: ");
-                    String categoria = scanner.nextLine();
-
-                    Libro libro = new Libro(idLib, titulo, autor, editorial, año, categoria, "disponible");
-                    inventario.registrarNuevoLibro(libro); // si no está en el inventario
+                    
+                    Libro libro = inventario.buscarLibroInventario(idLib);
                     boolean prestado = inventario.realizarPrestamoCliente(idCliente, libro);
                     System.out.println(prestado ? "Préstamo registrado." :
                             "No se pudo realizar el préstamo (cliente, libro o estado inválido).");
                     break;
-                    case 4:
-                System.out.println("Ingrese datos del libro a registrar en el inventario:");
+                case 4:
+                    System.out.println("Ingrese datos del libro a registrar en el inventario:");
                     System.out.print("Identificador: ");
                     int idNuevoLib = scanner.nextInt();
                     scanner.nextLine();
