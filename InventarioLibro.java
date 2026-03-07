@@ -78,22 +78,38 @@ public void mostrarEstado(Libro t){
         }
         return null;
     }
-public boolean realizarPrestamoCliente(int idCliente, Libro libro) {
-    Cliente c = buscarCliente(idCliente);
-    if (c == null || libro == null) {
-        return false;
+    public boolean realizarPrestamoCliente(int idCliente, Libro libro) {
+        Cliente c = buscarCliente(idCliente);
+        if (c == null || libro == null) {
+            return false;
+        }
+        if (c.getLibro() != null) {  //ya tiene un libro
+            return false;
+        }
+        if (!buscarLibro(libro.getIdentificador())) { //el libro no existe en el inventario
+            return false;
+        }
+        boolean ok = c.recibirLibro(libro);
+        if (ok) {
+            cambiarEstadoPorPrestamo(libro);
+        }
+        return ok;
     }
-    if (c.getLibro() != null) { 
-        return false;
+    
+    public boolean registrarDevolucionCliente(int idCliente) {
+        Cliente c = buscarCliente(idCliente);
+        if (c == null) {
+            return false;
+        }
+        Libro l = c.getLibro();
+        if (l == null) {// ningún libro que devolver
+            return false;
+        }
+        boolean ok = c.devolverLibro();
+        if (ok) {
+            l.setEstado("disponible"); 
+        }
+        return ok;
     }
-    if (!buscarLibro(libro.getIdentificador())) {
-        return false;
-    }
-    boolean ok = c.recibirLibro(libro);
-    if (ok) {
-        cambiarEstadoPorPrestamo(libro);
-    }
-    return ok;
-}
 
 }
