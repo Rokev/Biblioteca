@@ -105,6 +105,9 @@ public class Main {
                     System.out.println(devuelto ? "Devolución registrada." :
                             "No se pudo registrar la devolución (cliente o estado inválido).");
                     break;
+                case 7:
+                    System.out.println("Saliendo del programa.");
+                    break;
                 default:
                     System.out.println("Opción no válida, intente nuevamente.");
             }
