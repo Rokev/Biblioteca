@@ -1,5 +1,3 @@
-package Biblioteca;
-
 public class Libro {
 
     int identificador;

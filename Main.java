@@ -1,9 +1,5 @@
 import java.util.Scanner;
 
-import Biblioteca.Cliente;
-import Biblioteca.InventarioLibro;
-import Biblioteca.Libro;
-
 public class Main {
     public static void main(String[] args) {
         InventarioLibro inventario = new InventarioLibro();

@@ -1,4 +1,3 @@
-package Biblioteca;
 import java.util.ArrayList;
 
 public class InventarioLibro {
@@ -73,7 +72,7 @@ public boolean cambiarEstadoPorRetiro(Libro t){
 public void mostrarEstado(Libro t){
     boolean temp=this.buscarLibro(t.getIdentificador());
     if(temp){
-        System.out.println(t.getEstado(), "informacion libro" , ":", t.getTitulo() , t.getAñoPublicacion(), t.getAutor(),t.identificador,t.getCategoria(),t.getEditorial(),t.get);
+        System.out.println( "informacion libro"  + ":" +  t.getTitulo() + t.getAñoPublicacion() + t.getAutor() + t.getIdentificador() + t.getCategoria() + t.getEditorial() + t.getEstado());
     } System.out.println("no se enceuntra dentro del inventario");
 
 }
