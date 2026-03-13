@@ -64,7 +64,7 @@ public class Cliente {
 
     public String mostrarInfo(){
         String tieneLibro = (this.libro!=null) ? "Si tiene libro": "No tiene libro";
-        return "Cliente: " + nombre + ", Teléfono: " + telefono + ", Dirección: " + dirección + ", " + tieneLibro;
+        return "Cliente: " + nombre +  ", Id:" + id + ", Teléfono: " + telefono + ", Dirección: " + dirección + ", " + tieneLibro;
     }
 
     public boolean recibirLibro(Libro libro){
