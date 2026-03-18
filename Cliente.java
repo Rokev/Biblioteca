@@ -1,9 +1,11 @@
+import java.util.ArrayList;
 public class Cliente {
     private int id;
     private String nombre;
     private String telefono;
     private String dirección;
     private Libro libro;
+    private ArrayList<Libro> historialP;
 
 
     public Cliente(int id, String nombre, String telefono, String dirección,Libro libro) {
@@ -12,6 +14,7 @@ public class Cliente {
         this.telefono = telefono;
         this.dirección = dirección;
         this.libro = libro;
+	this.historialP=new ArrayList<>();
     }
 
 
@@ -70,6 +73,7 @@ public class Cliente {
     public boolean recibirLibro(Libro libro){
         if(this.libro == null && libro !=null){
             this.libro = libro;
+	    historialP.add(libro);
             return true;
         }
         return false;
@@ -82,4 +86,9 @@ public class Cliente {
         }
         return false; 
     }
+
+public ArrayList<Libro> getHistorialP(){
+        return historialP;
+}
+
 }

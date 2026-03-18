@@ -6,7 +6,7 @@ public class Main {
         
         Scanner scanner = new Scanner(System.in);
         int opcion =0;
-        while(opcion != 7){
+        while(opcion !=8){
             System.out.println("\n--- MENÚ ---");
             System.out.println("1. Agregar cliente");
             System.out.println("2. Mostrar clientes");
@@ -14,7 +14,8 @@ public class Main {
             System.out.println("4. Agregar libro al inventario");
             System.out.println("5. Listar libros");
             System.out.println("6. Realizar devolución de libro por cliente");
-            System.out.println("7. Salir");
+            System.out.println("7. consultar historial de prestamo de un cliente");
+	    System.out.println("8. salir");
 
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
@@ -91,8 +92,14 @@ public class Main {
                             "No se pudo registrar la devolución (cliente o estado inválido).");
                     break;
                 case 7:
-                    System.out.println("Saliendo del programa.");
+                    System.out.println("id cliente para consultar hitorial: ");
+		    int idHistorial= scanner.nextInt();
+		    scanner.nextLine();
+		    inventario.mostrarHistorial(idHistorial);
                     break;
+		case 8:
+		    System.out.println("saliendo del programa");
+		    break;
                 default:
                     System.out.println("Opción no válida, intente nuevamente.");
             }

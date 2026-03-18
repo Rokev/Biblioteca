@@ -131,4 +131,23 @@ public void mostrarEstado(Libro t){
         System.out.println("----------------------");
     }
 }
+
+public void mostrarHistorial(int id){
+        Cliente c=buscarCliente(id);
+	if(c==null){
+           System.out.println("no existe el cliente");
+		    return;
+	}
+
+	if(c.getHistorialP().isEmpty()){
+	   System.out.println("el cliente no tiene prestamos registrados");
+			return;
+	}
+
+        System.out.println("historial de prestamos del cliente"+c.getNombre());
+	 for(Libro l:c.getHistorialP()){
+	    System.out.println(l.getTitulo() + l.getIdentificador());
+	 }
+} 
+
 }
