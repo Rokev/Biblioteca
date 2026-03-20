@@ -149,5 +149,37 @@ public void mostrarHistorial(int id){
 	    System.out.println(l.getTitulo() + l.getIdentificador());
 	 }
 } 
+ public ArrayList<Libro> buscarLibrosPorTitulo(String texto){
+        ArrayList<Libro> resultados = new ArrayList<>();
+        String busqueda=texto.toLowerCase();
+        for(Libro l : lLibro){
+           if(l.getTitulo().toLowerCase().contains(busqueda)){
+              resultados.add(l);
+           }
+        }
+        return resultados;
+   }
+
+   public ArrayList<Libro> buscarLibrosPorAutor(String texto){
+        ArrayList<Libro> resultados = new ArrayList<>();
+        String busqueda = texto.toLowerCase();
+        for(Libro l : lLibro){
+            if(l.getAutor().toLowerCase().contains(busqueda)){
+                resultados.add(l);
+            }
+        }
+        return resultados;
+   }
+
+   public ArrayList<Libro> buscarLibrosPorCategoria(String texto){
+        ArrayList<Libro> resultados = new ArrayList<>();
+        String busqueda = texto.toLowerCase();
+        for(Libro l : lLibro){
+            if(l.getCategoria().toLowerCase().contains(busqueda)){
+                resultados.add(l);
+            }
+        }
+        return resultados;
+   }
 
 }
