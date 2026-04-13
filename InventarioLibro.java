@@ -1,14 +1,20 @@
 import java.util.ArrayList;
 
 public class InventarioLibro {
-    ArrayList <Libro> lLibro;
-    ArrayList <Cliente> lCliente;
+    private ArrayList <Libro> lLibro;
+    private ArrayList <Cliente> lCliente;
+    private int sizeL;
+    private int sizec;
+    private int sizeph;
+
 
 
     public InventarioLibro() {
         this.lLibro = new ArrayList<>();
         this.lCliente=new ArrayList<>();
-
+        this.sizeL=0;
+        this.sizec=0;
+        this.sizeph=0;
     }
     public boolean registrarNuevoLibro(Libro temp){
         for(int i=0;i<lLibro.size();i++){
@@ -18,6 +24,7 @@ public class InventarioLibro {
     
         }
         lLibro.add(temp);
+        sizeL++;
         return true;
     }
 
@@ -28,6 +35,7 @@ public class InventarioLibro {
             }
         }
         lCliente.add(cliente);
+        sizec++;
         return true;
     }
 
@@ -99,6 +107,7 @@ public void mostrarEstado(Libro t){
         boolean ok = c.recibirLibro(libro);
         if (ok) {
             cambiarEstadoPorPrestamo(libro);
+            sizeph++;
         }
         return ok;
     }
@@ -181,5 +190,19 @@ public void mostrarHistorial(int id){
         }
         return resultados;
    }
+   
+    
+    public Cliente obtenerClienteConMasPrestamos() {
+        if (lCliente == null || lCliente.isEmpty()) {
+            return null;  // o lanzar una excepción si se prefiere
+        }
 
+        Cliente clienteMax = lCliente.get(0);
+        for (Cliente c : lCliente) {
+            if (c.getcPrestamos() > clienteMax.getcPrestamos()) {
+                clienteMax = c;
+            }
+        }
+        return clienteMax;
+    }
 }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 public class Cliente {
     private int id;
     private String nombre;
@@ -6,6 +7,7 @@ public class Cliente {
     private String dirección;
     private Libro libro;
     private ArrayList<Libro> historialP;
+    private int cPrestamos;
 
 
     public Cliente(int id, String nombre, String telefono, String dirección,Libro libro) {
@@ -15,6 +17,7 @@ public class Cliente {
         this.dirección = dirección;
         this.libro = libro;
 	this.historialP=new ArrayList<>();
+    this.cPrestamos=this.cPrestamos();
     }
 
 
@@ -70,6 +73,23 @@ public class Cliente {
         return "Cliente: " + nombre +  ", Id:" + id + ", Teléfono: " + telefono + ", Dirección: " + dirección + ", " + tieneLibro;
     }
 
+    
+
+    public void setHistorialP(ArrayList<Libro> historialP) {
+        this.historialP = historialP;
+    }
+
+
+    public int getcPrestamos() {
+        return cPrestamos;
+    }
+
+
+    public void setcPrestamos(int cPrestamos) {
+        this.cPrestamos = cPrestamos;
+    }
+
+
     public boolean recibirLibro(Libro libro){
         if(this.libro == null && libro !=null){
             this.libro = libro;
@@ -90,5 +110,29 @@ public class Cliente {
 public ArrayList<Libro> getHistorialP(){
         return historialP;
 }
+ 
+public int cPrestamos(){
+    if(recibirLibro(libro)){
+        cPrestamos++;
+        return cPrestamos;
+    }  return 0;
+
+}
+   public Cliente obtenerClienteConMasPrestamos() {
+        if (clientes == null || clientes.isEmpty()) {
+            return null;  // o lanzar una excepción si se prefiere
+        }
+
+        Cliente clienteMax = clientes.get(0);
+        for (Cliente c : clientes) {
+            if (c.getNumeroPrestamos() > clienteMax.getNumeroPrestamos()) {
+                clienteMax = c;
+            }
+        }
+        return clienteMax;
+    }
+
+
+
 
 }
