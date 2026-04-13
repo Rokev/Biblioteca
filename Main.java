@@ -131,7 +131,7 @@ public class Main {
 		    else {
 		        System.out.println("Libros encontrados:");
 		        for (Libro l : resultados){
-			    System.put.println("--------------------");
+			    System.out.println("--------------------");
 			    System.out.println("Id: " + l.getIdentificador());
                             System.out.println("Titulo: " + l.getTitulo());
                             System.out.println("Autor: " + l.getAutor());
