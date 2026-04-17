@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+
 public class InventarioLibro {
     private ArrayList <Libro> lLibro;
     private ArrayList <Cliente> lCliente;
@@ -48,10 +49,10 @@ public class InventarioLibro {
     
     public boolean buscarLibro(int codigo){
         for(int i=0;i<lLibro.size();i++){
-    if(lLibro.get(i).getIdentificador()!=codigo){
-        return false;
+    if(lLibro.get(i).getIdentificador()==codigo){
+        return true;
     } 
-}  return true; 
+}  return false; 
 }
     public Libro buscarLibroInventario(int codigo){
         for (Libro l : lLibro) {
@@ -94,6 +95,7 @@ public void mostrarEstado(Libro t){
         return null;
     }
     public boolean realizarPrestamoCliente(int idCliente, Libro libro) {
+        int contador=0;
         Cliente c = buscarCliente(idCliente);
         if (c == null || libro == null) {
             return false;
@@ -108,6 +110,8 @@ public void mostrarEstado(Libro t){
         if (ok) {
             cambiarEstadoPorPrestamo(libro);
             sizeph++;
+            contador++;
+            libro.setSolicitud(contador);
         }
         return ok;
     }
@@ -180,7 +184,7 @@ public void mostrarHistorial(int id){
         return resultados;
    }
 
-   public ArrayList<Libro> buscarLibrosPorCategoria(String texto){
+    public ArrayList<Libro> buscarLibrosPorCategoria(String texto){
         ArrayList<Libro> resultados = new ArrayList<>();
         String busqueda = texto.toLowerCase();
         for(Libro l : lLibro){
@@ -192,7 +196,7 @@ public void mostrarHistorial(int id){
    }
    
     
-    public Cliente obtenerClienteConMasPrestamos() {
+    public String obtenerClienteConMasPrestamos() {
         if (lCliente == null || lCliente.isEmpty()) {
             return null;  // o lanzar una excepción si se prefiere
         }
@@ -203,6 +207,40 @@ public void mostrarHistorial(int id){
                 clienteMax = c;
             }
         }
-        return clienteMax;
+        return clienteMax.getNombre();
     }
+    public String obtenerLibroConMenosSolicitudes() {
+        if (lLibro == null || lLibro.isEmpty()) {
+            return null;  // o lanzar excepción
+        }
+
+        Libro libroMin = lLibro.get(0);
+        for (Libro lib : lLibro) {
+            if (lib.getSolicitud() < libroMin.getSolicitud()) {
+                libroMin = lib;
+            }
+        }
+        return libroMin.getTitulo();
+
+    }
+
+    public int contarClientesConPrestamoActivo() {
+    int contador = 0;
+    for (Cliente cliente : lCliente) {
+        if (cliente.getLibro() != null) {
+            contador++;
+        }
+    }
+    return contador;
+}
+
+public void mostrarModulo(){
+    System.out.println("total libros:" + this.sizeL);
+    System.out.println("total clientes:" + this.sizec);
+    System.out.println("total prestamos activos:" + this.contarClientesConPrestamoActivo());
+    System.out.println("total prestamos historicos:" + this.sizeph);
+    System.out.println("cliente con mayor numero de prestamos:" + this.obtenerClienteConMasPrestamos());
+    System.out.println("libro menos solicitado:" + this.obtenerLibroConMenosSolicitudes());
+}
+
 }

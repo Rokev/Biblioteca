@@ -7,6 +7,7 @@ public class Libro {
     int añoPublicacion;
     String categoria;
     String estado;
+    int solicitud=0;
     
     public Libro(int identificador, String titulo, String autor, String editorial, int añoPublicacion, String categoria,
             String estado) {
@@ -17,6 +18,7 @@ public class Libro {
         this.añoPublicacion = añoPublicacion;
         this.categoria = categoria;
         this.estado = estado;
+        this.solicitud=0;
     }
 
     public int getIdentificador() {
@@ -73,6 +75,14 @@ public class Libro {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public int getSolicitud() {
+        return solicitud;
+    }
+
+    public void setSolicitud(int solicitud) {
+        this.solicitud = solicitud;
     }
 
     

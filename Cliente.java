@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 public class Cliente {
     private int id;
     private String nombre;
@@ -118,19 +117,7 @@ public int cPrestamos(){
     }  return 0;
 
 }
-   public Cliente obtenerClienteConMasPrestamos() {
-        if (clientes == null || clientes.isEmpty()) {
-            return null;  // o lanzar una excepción si se prefiere
-        }
 
-        Cliente clienteMax = clientes.get(0);
-        for (Cliente c : clientes) {
-            if (c.getNumeroPrestamos() > clienteMax.getNumeroPrestamos()) {
-                clienteMax = c;
-            }
-        }
-        return clienteMax;
-    }
 
 
 

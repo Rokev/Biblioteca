@@ -18,6 +18,7 @@ public class Main {
             System.out.println("7. consultar historial de prestamo de un cliente");
 	    System.out.println("8. Buscar Libros");
 	    System.out.println("9. salir");
+	    System.out.println("10. mostrar modulo");
 
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
@@ -131,7 +132,7 @@ public class Main {
 		    else {
 		        System.out.println("Libros encontrados:");
 		        for (Libro l : resultados){
-			    System.put.println("--------------------");
+			    System.out.println("--------------------");
 			    System.out.println("Id: " + l.getIdentificador());
                             System.out.println("Titulo: " + l.getTitulo());
                             System.out.println("Autor: " + l.getAutor());
@@ -148,9 +149,15 @@ public class Main {
 		    case 9:
 		    System.out.println("saliendo del programa");
 		    break;
-                default:
-                    System.out.println("Opción no válida, intente nuevamente.");
-            }
+              
+            case 10:
+                System.out.println("Modulo mostrar");
+                inventario.mostrarModulo();
+                
+                  default:
+                 
+                  System.out.println("Opción no válida, intente nuevamente.");
+        }
         }
         scanner.close();
     }
