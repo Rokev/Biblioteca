@@ -148,7 +148,7 @@ public class Main {
                                 
                                 
                                 break;
-                                case 9:
+                case 9:
                                     System.out.print("Ingrese el ID del cliente: ");
                                     int idClienteMultas = scanner.nextInt();
                                     scanner.nextLine();

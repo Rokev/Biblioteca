@@ -8,6 +8,7 @@ public class InventarioLibro {
     ArrayList <Cliente> lCliente;
     private static final String LIBROS_FILE = "data/libros.txt";
     private static final String CLIENTES_FILE = "data/clientes.txt";
+    private static final String ESTADISTICAS_FILE = "data/estadisticas.txt";
     private int sizeL;
     private int sizec;
     private int sizeph;
@@ -25,6 +26,7 @@ public class InventarioLibro {
         }
         cargarLibros();
         cargarClientes();
+        cargarEstadisticas();
     }
     public boolean registrarNuevoLibro(Libro temp){
         for(int i=0;i<lLibro.size();i++){
@@ -36,6 +38,7 @@ public class InventarioLibro {
         lLibro.add(temp);
         sizeL++;
         guardarLibros();
+        guardarEstadisticas();
         return true;
     }
 
@@ -48,14 +51,34 @@ public class InventarioLibro {
         lCliente.add(cliente);
         sizec++;
         guardarClientes();
+        guardarEstadisticas();
         return true;
     }
 
     public void mostrarInfoClientes(){
+        // Guardar datos actuales antes de recargar para asegurar persistencia
+        guardarClientes();
+        guardarLibros();
+
+        // Recargar datos desde archivos para garantizar que se muestre lo persistido
+        // Primero recargar libros (necesarios para asignar libros prestados)
+        lLibro.clear();
+        cargarLibros();
+        // Luego recargar clientes
+        lCliente.clear();
+        cargarClientes();
+
+        if(lCliente.isEmpty()){
+            System.out.println("No hay clientes registrados.");
+            return;
+        }
+
+        System.out.println("\n========== LISTA DE CLIENTES ==========");
         for(Cliente c: lCliente){
             String x =c.mostrarInfo();
             System.out.println(x);
         }
+        System.out.println("======================================\n");
     }
     
     public boolean buscarLibro(int codigo){
@@ -124,13 +147,15 @@ public void mostrarEstado(Libro t){
         if (ok) {
             cambiarEstadoPorPrestamo(libro);
             sizeph++;
+            guardarEstadisticas();
             contador++;
             libro.setSolicitud(contador);
             // Crear registro de préstamo con fecha límite de 14 días
             LocalDateTime fechaEntrega = LocalDateTime.now();
-            LocalDateTime fechaLimite = fechaEntrega.plusDays(-2);
+            LocalDateTime fechaLimite = fechaEntrega.plusDays(14);
             Prestamo prestamo = new Prestamo(fechaEntrega, fechaLimite);
             c.agregarPrestamo(prestamo);
+            guardarClientes();
         }
         return ok;
     }
@@ -155,27 +180,48 @@ public void mostrarEstado(Libro t){
                 
                 if (ultimoPrestamo.tieneRetraso()) {
                     c.agregarMulta(ultimoPrestamo.getMulta());
-                    guardarClientes();
                 }
             }
+            // Guardar cliente para persistir que el préstamo fue devuelto
+            guardarClientes();
         }
         return ok;
     }
 
     public void listarLibros() {
-    for (Libro libro : lLibro) {
-        System.out.println("ID: " + libro.identificador);
-        System.out.println("Titulo: " + libro.titulo);
-        System.out.println("Autor: " + libro.autor);
-        System.out.println("Editorial: " + libro.editorial);
-        System.out.println("Año: " + libro.añoPublicacion);
-        System.out.println("Categoria: " + libro.categoria);
-        System.out.println("Estado: " + libro.estado);
-        System.out.println("----------------------");
+        // Guardar datos actuales antes de recargar para asegurar persistencia
+        guardarLibros();
+
+        // Recargar datos desde archivo para garantizar persistencia
+        lLibro.clear();
+        cargarLibros();
+
+        if(lLibro.isEmpty()){
+            System.out.println("No hay libros registrados en el inventario.");
+            return;
+        }
+
+        System.out.println("\n========== INVENTARIO DE LIBROS ==========");
+        for (Libro libro : lLibro) {
+            System.out.println("ID: " + libro.identificador);
+            System.out.println("Titulo: " + libro.titulo);
+            System.out.println("Autor: " + libro.autor);
+            System.out.println("Editorial: " + libro.editorial);
+            System.out.println("Año: " + libro.añoPublicacion);
+            System.out.println("Categoria: " + libro.categoria);
+            System.out.println("Estado: " + libro.estado);
+            System.out.println("----------------------");
+        }
+        System.out.println("=========================================\n");
     }
-}
 
 public void mostrarHistorial(int id){
+        // Asegurar que los datos estén sincronizados
+        guardarClientes();
+        guardarLibros();
+        lCliente.clear();
+        cargarClientes();
+
         Cliente c=buscarCliente(id);
 	if(c==null){
            System.out.println("no existe el cliente");
@@ -265,6 +311,14 @@ public void mostrarHistorial(int id){
 }
 
 public void mostrarModulo(){
+    // Asegurar sincronización de datos
+    guardarClientes();
+    guardarLibros();
+    guardarEstadisticas();
+    
+    // Recargar estadísticas
+    cargarEstadisticas();
+    
     System.out.println("total libros:" + this.sizeL);
     System.out.println("total clientes:" + this.sizec);
     System.out.println("total prestamos activos:" + this.contarClientesConPrestamoActivo());
@@ -274,6 +328,11 @@ public void mostrarModulo(){
 }
 
     public void mostrarMultasCliente(int idCliente) {
+        // Asegurar sincronización
+        guardarClientes();
+        lCliente.clear();
+        cargarClientes();
+        
         Cliente c = buscarCliente(idCliente);
         if (c == null) {
             System.out.println("Cliente no encontrado");
@@ -313,6 +372,11 @@ public void mostrarModulo(){
     }
 
     public boolean pagarMultaCliente(int idCliente, double monto) {
+        // Asegurar sincronización
+        guardarClientes();
+        lCliente.clear();
+        cargarClientes();
+        
         Cliente c = buscarCliente(idCliente);
         if (c == null) {
             System.out.println("Cliente no encontrado");
@@ -373,7 +437,20 @@ public void mostrarModulo(){
     private void guardarClientes() {
         java.util.List<String> lines = new java.util.ArrayList<>();
         for (Cliente c : lCliente) {
-            lines.add(c.getId() + "," + c.getNombre() + "," + c.getTelefono() + "," + c.getDirección() + "," + c.getMultaPendiente());
+            // Obtener ID del libro prestado (si existe)
+            int libroPrestamoId = (c.getLibro() != null) ? c.getLibro().getIdentificador() : -1;
+            
+            // Serializar historial de préstamos
+            StringBuilder prestamosStr = new StringBuilder();
+            for (Prestamo p : c.getHistorialPrestamos()) {
+                if (prestamosStr.length() > 0) {
+                    prestamosStr.append(";");
+                }
+                String fechaDev = (p.getFechaDevolucion() != null) ? p.getFechaDevolucion().toString() : "null";
+                prestamosStr.append(p.getFechaEntrega() + "|" + fechaDev + "|" + p.getFechaLimiteDevolucion() + "|" + p.getDiasRetraso() + "|" + p.getMulta());
+            }
+            
+            lines.add(c.getId() + "|" + c.getNombre() + "|" + c.getTelefono() + "|" + c.getDirección() + "|" + c.getMultaPendiente() + "|" + libroPrestamoId + "|" + prestamosStr.toString());
         }
         FileUtil.writeFile(CLIENTES_FILE, lines);
     }
@@ -381,19 +458,80 @@ public void mostrarModulo(){
     private void cargarClientes() {
         java.util.List<String> lines = FileUtil.readFile(CLIENTES_FILE);
         for (String line : lines) {
-            String[] parts = line.split(",");
-            if (parts.length == 5) {
+            String[] parts = line.split("\\|");
+            if (parts.length >= 5) {
                 try {
                     int id = Integer.parseInt(parts[0]);
                     String nombre = parts[1];
                     String telefono = parts[2];
                     String direccion = parts[3];
                     double multa = Double.parseDouble(parts[4]);
+                    
                     Cliente c = new Cliente(id, nombre, telefono, direccion, null);
                     c.setMultaPendiente(multa);
+                    
+                    // Cargar libro prestado si existe
+                    if (parts.length > 5) {
+                        int libroPrestamoId = Integer.parseInt(parts[5]);
+                        if (libroPrestamoId != -1) {
+                            Libro libroActivo = buscarLibroInventario(libroPrestamoId);
+                            if (libroActivo != null) {
+                                c.setLibro(libroActivo);
+                            }
+                        }
+                    }
+                    
+                    // Cargar historial de préstamos
+                    if (parts.length > 6 && !parts[6].isEmpty()) {
+                        String[] prestamos = parts[6].split(";");
+                        for (String prestamoStr : prestamos) {
+                            String[] prestamoData = prestamoStr.split("\\|");
+                            if (prestamoData.length == 5) {
+                                try {
+                                    java.time.LocalDateTime fechaEntrega = java.time.LocalDateTime.parse(prestamoData[0]);
+                                    java.time.LocalDateTime fechaDevolucion = prestamoData[1].equals("null") ? null : java.time.LocalDateTime.parse(prestamoData[1]);
+                                    java.time.LocalDateTime fechaLimite = java.time.LocalDateTime.parse(prestamoData[2]);
+                                    int diasRetraso = Integer.parseInt(prestamoData[3]);
+                                    double multaPrestamo = Double.parseDouble(prestamoData[4]);
+                                    
+                                    Prestamo prestamo = new Prestamo(fechaEntrega, fechaLimite);
+                                    prestamo.setFechaDevolucion(fechaDevolucion);
+                                    prestamo.setDiasRetraso(diasRetraso);
+                                    prestamo.setMulta(multaPrestamo);
+                                    c.agregarPrestamo(prestamo);
+                                } catch (Exception e) {
+                                    // Ignorar préstamos mal formateados
+                                }
+                            }
+                        }
+                    }
+                    
                     lCliente.add(c);
                 } catch (NumberFormatException e) {
-                    // Ignorar
+                    // Ignorar líneas mal formateadas
+                }
+            }
+        }
+    }
+
+    private void guardarEstadisticas() {
+        java.util.List<String> lines = new java.util.ArrayList<>();
+        lines.add(sizeL + "|" + sizec + "|" + sizeph);
+        FileUtil.writeFile(ESTADISTICAS_FILE, lines);
+    }
+
+    private void cargarEstadisticas() {
+        java.util.List<String> lines = FileUtil.readFile(ESTADISTICAS_FILE);
+        if (lines.size() > 0) {
+            String line = lines.get(0);
+            String[] parts = line.split("\\|");
+            if (parts.length == 3) {
+                try {
+                    this.sizeL = Integer.parseInt(parts[0]);
+                    this.sizec = Integer.parseInt(parts[1]);
+                    this.sizeph = Integer.parseInt(parts[2]);
+                } catch (NumberFormatException e) {
+                    // Si hay error, mantener valores inicializados en 0
                 }
             }
         }
