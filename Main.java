@@ -7,7 +7,7 @@ public class Main {
         
         Scanner scanner = new Scanner(System.in);
         int opcion =0;
-        while(opcion !=9){
+        while(opcion !=11){
             System.out.println("\n--- MENÚ ---");
             System.out.println("1. Agregar cliente");
             System.out.println("2. Mostrar clientes");
@@ -16,9 +16,11 @@ public class Main {
             System.out.println("5. Listar libros");
             System.out.println("6. Realizar devolución de libro por cliente");
             System.out.println("7. consultar historial de prestamo de un cliente");
-	    System.out.println("8. Buscar Libros");
-	    System.out.println("9. salir");
-	    System.out.println("10. mostrar modulo");
+            System.out.println("8. Buscar Libros");
+            System.out.println("9. Consultar multas de un cliente");
+            System.out.println("10. Pagar multa");
+            System.out.println("11. salir");
+            System.out.println("12. mostrar modulo");
 
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
@@ -96,69 +98,83 @@ public class Main {
                     break;
                 case 7:
                     System.out.println("id cliente para consultar hitorial: ");
-		    int idHistorial= scanner.nextInt();
-		    scanner.nextLine();
-		    inventario.mostrarHistorial(idHistorial);
+                    int idHistorial= scanner.nextInt();
+                    scanner.nextLine();
+                    inventario.mostrarHistorial(idHistorial);
                     break;
-		case 8:
-		    System.out.println("Buscar libros por:");
-		    System.out.println("1. Titulo");
-		    System.out.println("2. Autor");
-		    System.out.println("3. Categoria");
-		    System.out.println("Seleccione una opcion: ");
-		    int criterio = scanner.nextInt();
-		    scanner.nextLine();
+                case 8:
+                    System.out.println("Buscar libros por:");
+                    System.out.println("1. Titulo");
+                    System.out.println("2. Autor");
+                    System.out.println("3. Categoria");
+                    System.out.println("Seleccione una opcion: ");
+                    int criterio = scanner.nextInt();
+                    scanner.nextLine();
+                    
+                    System.out.println("Ingrese texto de busqueda");
+                    String textoBusqueda = scanner.nextLine();
+                    
+                    ArrayList<Libro> resultados;
+                    switch (criterio){
+                        case 1:
+                            resultados = inventario.buscarLibrosPorTitulo(textoBusqueda);
+                            break;
+                        case 2:
+                            resultados = inventario.buscarLibrosPorAutor(textoBusqueda);
+                            break;
+                        case 3:
+                            resultados = inventario.buscarLibrosPorCategoria(textoBusqueda);
+                            break;
+                        default:
+                            resultados = new ArrayList<>();
+                    }
+                    if(resultados.isEmpty()){
+                    System.out.println("No hay libros registrados que coincidan con el criterio ingresado");
+                }
+                else {
+                    System.out.println("Libros encontrados:");
+                    for (Libro l : resultados){
+                        System.out.println("--------------------");
+                        System.out.println("Id: " + l.getIdentificador());
+                        System.out.println("Titulo: " + l.getTitulo());
+                                        System.out.println("Autor: " + l.getAutor());
+                                        System.out.println("Editorial: " + l.getEditorial());
+                                        System.out.println("Año: " + l.getAñoPublicacion());
+                                        System.out.println("Categoria: " + l.getCategoria());
+                                        System.out.println("Estado: " + l.getEstado());
+                                        System.out.println("--------------------");
+                                    }
+                                }
+                                
+                                
+                                break;
+                                case 9:
+                                    System.out.print("Ingrese el ID del cliente: ");
+                                    int idClienteMultas = scanner.nextInt();
+                                    scanner.nextLine();
+                                    inventario.mostrarMultasCliente(idClienteMultas);
+                                    break;
+                                case 10:
+                                    System.out.print("Ingrese el ID del cliente: ");
+                                    int idClientePago = scanner.nextInt();
+                                    scanner.nextLine();
+                                    System.out.print("Ingrese el monto a pagar: ");
+                                    double monto = scanner.nextDouble();
+                                    scanner.nextLine();
+                                    inventario.pagarMultaCliente(idClientePago, monto);
+                                    break;
+                                case 11:
+                                    System.out.println("saliendo del programa");
+                                    break;
 
-		    System.out.println("Ingrese texto de busqueda");
-		    String textoBusqueda = scanner.nextLine();
-		    
-		    ArrayList<Libro> resultados;
-		    switch (criterio){
-		        case 1:
-			     resultados = inventario.buscarLibrosPorTitulo(textoBusqueda);
-			     break;
-			 case 2:
-			     resultados = inventario.buscarLibrosPorAutor(textoBusqueda);
-			     break;
-			 case 3:
-			     resultados = inventario.buscarLibrosPorCategoria(textoBusqueda);
-			     break;
-			 default:
-			     resultados = new ArrayList<>();
-		    }
-		    if(resultados.isEmpty()){
-		        System.out.println("No hay libros registrados que coincidan con el criterio ingresado");
-		    }
-		    else {
-		        System.out.println("Libros encontrados:");
-		        for (Libro l : resultados){
-			    System.out.println("--------------------");
-			    System.out.println("Id: " + l.getIdentificador());
-                            System.out.println("Titulo: " + l.getTitulo());
-                            System.out.println("Autor: " + l.getAutor());
-                            System.out.println("Editorial: " + l.getEditorial());
-                            System.out.println("Año: " + l.getAñoPublicacion());
-                            System.out.println("Categoria: " + l.getCategoria());
-                            System.out.println("Estado: " + l.getEstado());
-			    System.out.println("--------------------");
-			}
-		    }
-			    
-
-		    break;
-		    case 9:
-		    System.out.println("saliendo del programa");
-		    break;
-              
-            case 10:
-                System.out.println("Modulo mostrar");
-                inventario.mostrarModulo();
-                
-                  default:
-                 
-                  System.out.println("Opción no válida, intente nuevamente.");
-        }
-        }
-        scanner.close();
-    }
-}
+                                case 12:
+                                    System.out.println("Modulo mostrar");
+                                    inventario.mostrarModulo();
+                                    default:
+                                        System.out.println("Opción no válida, intente nuevamente.");
+                                    }
+                                }
+                                scanner.close();
+                            }
+                        }
+                        

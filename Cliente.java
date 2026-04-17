@@ -7,9 +7,11 @@ public class Cliente {
     private Libro libro;
     private ArrayList<Libro> historialP;
     private int cPrestamos;
+    private double multaPendiente;
+    private ArrayList<Prestamo> historialPrestamos;
 
 
-    public Cliente(int id, String nombre, String telefono, String dirección,Libro libro) {
+    public Cliente(int id, String nombre, String telefono, String dirección, Libro libro) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -17,6 +19,9 @@ public class Cliente {
         this.libro = libro;
 	this.historialP=new ArrayList<>();
     this.cPrestamos=this.cPrestamos();
+        this.historialP=new ArrayList<>();
+        this.multaPendiente=0;
+        this.historialPrestamos=new ArrayList<>();
     }
 
 
@@ -92,7 +97,7 @@ public class Cliente {
     public boolean recibirLibro(Libro libro){
         if(this.libro == null && libro !=null){
             this.libro = libro;
-	    historialP.add(libro);
+            historialP.add(libro);
             return true;
         }
         return false;
@@ -121,5 +126,33 @@ public int cPrestamos(){
 
 
 
+
+public double getMultaPendiente() {
+    return multaPendiente;
+}
+
+public void setMultaPendiente(double multaPendiente) {
+    this.multaPendiente = multaPendiente;
+}
+
+public void agregarMulta(double cantidad) {
+    this.multaPendiente += cantidad;
+}
+
+public void pagarMulta(double cantidad) {
+    if (cantidad <= multaPendiente) {
+        this.multaPendiente -= cantidad;
+    } else {
+        System.out.println("La cantidad a pagar excede la multa pendiente.");
+    }
+}
+
+public ArrayList<Prestamo> getHistorialPrestamos() {
+    return historialPrestamos;
+}
+
+public void agregarPrestamo(Prestamo prestamo) {
+    this.historialPrestamos.add(prestamo);
+}
 
 }
