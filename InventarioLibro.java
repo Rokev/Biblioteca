@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 public class InventarioLibro {
     ArrayList <Libro> lLibro;
@@ -40,11 +41,12 @@ public class InventarioLibro {
     
     public boolean buscarLibro(int codigo){
         for(int i=0;i<lLibro.size();i++){
-    if(lLibro.get(i).getIdentificador()!=codigo){
+            if(lLibro.get(i).getIdentificador()==codigo){
+                return true;
+            }
+        }
         return false;
-    } 
-}  return true; 
-}
+    }
     public Libro buscarLibroInventario(int codigo){
         for (Libro l : lLibro) {
             if(l.getIdentificador() == codigo) {
@@ -99,6 +101,11 @@ public void mostrarEstado(Libro t){
         boolean ok = c.recibirLibro(libro);
         if (ok) {
             cambiarEstadoPorPrestamo(libro);
+            // Crear registro de préstamo con fecha límite de 14 días
+            LocalDateTime fechaEntrega = LocalDateTime.now();
+            LocalDateTime fechaLimite = fechaEntrega.plusDays(-2);
+            Prestamo prestamo = new Prestamo(fechaEntrega, fechaLimite);
+            c.agregarPrestamo(prestamo);
         }
         return ok;
     }
@@ -114,7 +121,16 @@ public void mostrarEstado(Libro t){
         }
         boolean ok = c.devolverLibro();
         if (ok) {
-            l.setEstado("disponible"); 
+            l.setEstado("disponible");
+            // Calcular multa por retraso si aplica
+            if (!c.getHistorialPrestamos().isEmpty()) {
+                Prestamo ultimoPrestamo = c.getHistorialPrestamos().get(c.getHistorialPrestamos().size() - 1);
+                ultimoPrestamo.calcularMulta(LocalDateTime.now());
+                
+                if (ultimoPrestamo.tieneRetraso()) {
+                    c.agregarMulta(ultimoPrestamo.getMulta());
+                }
+            }
         }
         return ok;
     }
@@ -169,9 +185,9 @@ public void mostrarHistorial(int id){
             }
         }
         return resultados;
-   }
+    }
 
-   public ArrayList<Libro> buscarLibrosPorCategoria(String texto){
+    public ArrayList<Libro> buscarLibrosPorCategoria(String texto){
         ArrayList<Libro> resultados = new ArrayList<>();
         String busqueda = texto.toLowerCase();
         for(Libro l : lLibro){
@@ -180,6 +196,71 @@ public void mostrarHistorial(int id){
             }
         }
         return resultados;
-   }
+    }
 
+    public void mostrarMultasCliente(int idCliente) {
+        Cliente c = buscarCliente(idCliente);
+        if (c == null) {
+            System.out.println("Cliente no encontrado");
+            return;
+        }
+
+        System.out.println("\n========== MULTAS DEL CLIENTE ==========");
+        System.out.println("Nombre: " + c.getNombre());
+        System.out.println("ID: " + c.getId());
+        System.out.println("Multa Pendiente Total: $" + String.format("%.2f", c.getMultaPendiente()));
+        
+        if (c.getHistorialPrestamos().isEmpty()) {
+            System.out.println("\nEl cliente no tiene registros de préstamos.");
+        } else {
+            System.out.println("\n--- Historial de Préstamos y Multas ---");
+            int contador = 1;
+            for (Prestamo p : c.getHistorialPrestamos()) {
+                System.out.println("\nPréstamo #" + contador);
+                System.out.println("Fecha de Entrega: " + p.getFechaEntrega());
+                System.out.println("Fecha Límite: " + p.getFechaLimiteDevolucion());
+                
+                if (p.getFechaDevolucion() != null) {
+                    System.out.println("Fecha de Devolución: " + p.getFechaDevolucion());
+                    if (p.tieneRetraso()) {
+                        System.out.println("Días de Retraso: " + p.getDiasRetraso());
+                        System.out.println("Multa: $" + String.format("%.2f", p.getMulta()));
+                    } else {
+                        System.out.println("Estado: Devuelto a Tiempo");
+                    }
+                } else {
+                    System.out.println("Estado: Préstamo Activo (libro no devuelto)");
+                }
+                contador++;
+            }
+        }
+        System.out.println("\n========================================");
+    }
+
+    public boolean pagarMultaCliente(int idCliente, double monto) {
+        Cliente c = buscarCliente(idCliente);
+        if (c == null) {
+            System.out.println("Cliente no encontrado");
+            return false;
+        }
+
+        if (c.getMultaPendiente() == 0) {
+            System.out.println("El cliente no tiene multas pendientes.");
+            return false;
+        }
+
+        if (monto <= 0) {
+            System.out.println("El monto debe ser mayor a 0");
+            return false;
+        }
+
+        if (monto > c.getMultaPendiente()) {
+            System.out.println("El monto supera la multa pendiente de $" + String.format("%.2f", c.getMultaPendiente()));
+            return false;
+        }
+
+        c.pagarMulta(monto);
+        System.out.println("Pago registrado. Multa pendiente: " + String.format("%.2f", c.getMultaPendiente()));
+        return true;
+    }
 }
