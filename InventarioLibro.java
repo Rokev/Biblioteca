@@ -1,15 +1,23 @@
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.io.File;
 
 public class InventarioLibro {
     ArrayList <Libro> lLibro;
     ArrayList <Cliente> lCliente;
+    private static final String LIBROS_FILE = "data/libros.txt";
+    private static final String CLIENTES_FILE = "data/clientes.txt";
 
 
     public InventarioLibro() {
         this.lLibro = new ArrayList<>();
         this.lCliente=new ArrayList<>();
-
+        File dataDir = new File("data");
+        if (!dataDir.exists()) {
+            dataDir.mkdirs();
+        }
+        cargarLibros();
+        cargarClientes();
     }
     public boolean registrarNuevoLibro(Libro temp){
         for(int i=0;i<lLibro.size();i++){
@@ -19,6 +27,7 @@ public class InventarioLibro {
     
         }
         lLibro.add(temp);
+        guardarLibros();
         return true;
     }
 
@@ -29,6 +38,7 @@ public class InventarioLibro {
             }
         }
         lCliente.add(cliente);
+        guardarClientes();
         return true;
     }
 
@@ -60,6 +70,7 @@ public boolean cambiarEstadoPorPrestamo(Libro t){
     boolean temp=this.buscarLibro(t.getIdentificador());
     if(temp){
     t.setEstado("prestado a un cliente");
+    guardarLibros();
     return true;
     }return false;
 }
@@ -67,6 +78,7 @@ public boolean cambiarEstadoPorRetiro(Libro t){
     boolean temp=this.buscarLibro(t.getIdentificador());
     if(temp){
     t.setEstado("libro retirado");
+    guardarLibros();
     return true;
     }return false;
 }
@@ -122,6 +134,7 @@ public void mostrarEstado(Libro t){
         boolean ok = c.devolverLibro();
         if (ok) {
             l.setEstado("disponible");
+            guardarLibros();
             // Calcular multa por retraso si aplica
             if (!c.getHistorialPrestamos().isEmpty()) {
                 Prestamo ultimoPrestamo = c.getHistorialPrestamos().get(c.getHistorialPrestamos().size() - 1);
@@ -129,6 +142,7 @@ public void mostrarEstado(Libro t){
                 
                 if (ultimoPrestamo.tieneRetraso()) {
                     c.agregarMulta(ultimoPrestamo.getMulta());
+                    guardarClientes();
                 }
             }
         }
@@ -260,7 +274,67 @@ public void mostrarHistorial(int id){
         }
 
         c.pagarMulta(monto);
+        guardarClientes();
         System.out.println("Pago registrado. Multa pendiente: " + String.format("%.2f", c.getMultaPendiente()));
         return true;
+    }
+
+    private void guardarLibros() {
+        java.util.List<String> lines = new java.util.ArrayList<>();
+        for (Libro l : lLibro) {
+            lines.add(l.getIdentificador() + "," + l.getTitulo() + "," + l.getAutor() + "," + l.getEditorial() + "," + l.getAñoPublicacion() + "," + l.getCategoria() + "," + l.getEstado());
+        }
+        FileUtil.writeFile(LIBROS_FILE, lines);
+    }
+
+    private void cargarLibros() {
+        java.util.List<String> lines = FileUtil.readFile(LIBROS_FILE);
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            if (parts.length == 7) {
+                try {
+                    int id = Integer.parseInt(parts[0]);
+                    String titulo = parts[1];
+                    String autor = parts[2];
+                    String editorial = parts[3];
+                    int año = Integer.parseInt(parts[4]);
+                    String categoria = parts[5];
+                    String estado = parts[6];
+                    Libro l = new Libro(id, titulo, autor, editorial, año, categoria, estado);
+                    lLibro.add(l);
+                } catch (NumberFormatException e) {
+                    // Ignorar líneas mal formateadas
+                }
+            }
+        }
+    }
+
+    private void guardarClientes() {
+        java.util.List<String> lines = new java.util.ArrayList<>();
+        for (Cliente c : lCliente) {
+            lines.add(c.getId() + "," + c.getNombre() + "," + c.getTelefono() + "," + c.getDirección() + "," + c.getMultaPendiente());
+        }
+        FileUtil.writeFile(CLIENTES_FILE, lines);
+    }
+
+    private void cargarClientes() {
+        java.util.List<String> lines = FileUtil.readFile(CLIENTES_FILE);
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            if (parts.length == 5) {
+                try {
+                    int id = Integer.parseInt(parts[0]);
+                    String nombre = parts[1];
+                    String telefono = parts[2];
+                    String direccion = parts[3];
+                    double multa = Double.parseDouble(parts[4]);
+                    Cliente c = new Cliente(id, nombre, telefono, direccion, null);
+                    c.setMultaPendiente(multa);
+                    lCliente.add(c);
+                } catch (NumberFormatException e) {
+                    // Ignorar
+                }
+            }
+        }
     }
 }

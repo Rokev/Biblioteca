@@ -99,6 +99,10 @@ public double getMultaPendiente() {
     return multaPendiente;
 }
 
+public void setMultaPendiente(double multaPendiente) {
+    this.multaPendiente = multaPendiente;
+}
+
 public void agregarMulta(double cantidad) {
     this.multaPendiente += cantidad;
 }
